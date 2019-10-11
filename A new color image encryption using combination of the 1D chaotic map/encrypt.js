@@ -4,10 +4,10 @@ const pool = require("ndarray-scratch")
 const ndarray = require("ndarray")
 
 // secret parameters
-let x0 = 0.44
-let u = 2
+let x0 = 0.456
+let u = 5.4321
 let k = 14
-let n0 = 100
+let n0 = 1000
 let lp = 600
 
 getPixels('../images/lena_gray_256.png', (err, pixels) => {
@@ -17,19 +17,26 @@ getPixels('../images/lena_gray_256.png', (err, pixels) => {
   pixels.shape = [pixels.shape[0] * pixels.shape[1]]
 
   // permutation phase
+  console.time('permutation phase')
   let x = chaoticMap(x0, u, k, pixels.shape[0], n0)
   let I = getSortIndexes(x)
   pixels.data = sortByIndexes(pixels.data, I)
-
+  console.timeEnd('permutation phase')
+  
   // diffusion phase
+  console.time('diffusion')
   let D = getDiffusionVector(x)
   pixels.data = diffusePixels(pixels.data, I, D)
-
+  console.timeEnd('diffusion')
+  
   // rotation phase
+  console.time('rotation')
   pixels.data = rotatePixels(pixels.data, lp)
+  console.timeEnd('rotation')
 
   pixels.shape = [256, 256]
   imshow(pixels, {gray: true})
+
 })
 
 function chaoticMap (x0, u, k, iterations, n0) {
@@ -42,17 +49,18 @@ function chaoticMap (x0, u, k, iterations, n0) {
 }
 
 function getSortIndexes (array) {
-  let sortedArray = [].concat(array)
-  sortedArray.sort()
-  let indexes = []
-  sortedArray.forEach(element => {
-    let index = array.indexOf(element)
-    while (indexes.includes(index)) {
-      index = array.indexOf(element, index + 1)
-    }
-    indexes.push(index)
+  let result = []
+  for (let i = 0; i < array.length; i++) {
+    result[i] = {index: i, value: array[i]}
+  }
+  result.sort((a, b) => {
+    if (a.value <= b.value) return -1
+    else return 1
   })
-  return indexes
+  for (let i = 0; i < result.length; i++) {
+    result[i] = result[i].index
+  }
+  return result
 }
 
 function sortByIndexes (array, indexes) {
@@ -72,7 +80,6 @@ function getDiffusionVector (x) {
 }
 
 function diffusePixels (pixels, permutationVector, diffusionVector) {
-  console.log('diffusePixels')
   let newPixels = []
   newPixels[0] = pixels[0]
   for (let i = 1; i < pixels.length; i++) {
@@ -84,7 +91,6 @@ function diffusePixels (pixels, permutationVector, diffusionVector) {
 
 function rotatePixels (array, amount) {
   let newArray = [].concat(array)
-  console.log('rotatePixels')
   for (let i = 1; i <= amount; i++) {
     let element = newArray.shift()
     newArray.push(element)
