@@ -1,7 +1,8 @@
+const ndarray = require("ndarray")
 const getPixels = require('get-pixels')
 const imshow = require('ndarray-imshow')
 const pool = require("ndarray-scratch")
-const ndarray = require("ndarray")
+const {getSortIndexes, sortByIndexes} = require('../utils/array')
 
 // secret parameters
 let x0 = 0.456
@@ -46,29 +47,6 @@ function chaoticMap (x0, u, k, iterations, n0) {
     x.push(value - Math.floor(value))
   }
   return x.slice(n0)
-}
-
-function getSortIndexes (array) {
-  let result = []
-  for (let i = 0; i < array.length; i++) {
-    result[i] = {index: i, value: array[i]}
-  }
-  result.sort((a, b) => {
-    if (a.value <= b.value) return -1
-    else return 1
-  })
-  for (let i = 0; i < result.length; i++) {
-    result[i] = result[i].index
-  }
-  return result
-}
-
-function sortByIndexes (array, indexes) {
-  let sortedArray = []
-  indexes.forEach(index => {
-    sortedArray.push(array[index])
-  })
-  return sortedArray
 }
 
 function getDiffusionVector (x) {
