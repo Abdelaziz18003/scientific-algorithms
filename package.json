@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/Abdelaziz18003/scientific-algorithms/issues"
   },
-  "homepage": "https://github.com/Abdelaziz18003/scientific-algorithms#readme"
+  "homepage": "https://github.com/Abdelaziz18003/scientific-algorithms#readme",
+  "dependencies": {
+    "get-pixels": "^3.3.2",
+    "ndarray": "^1.0.18",
+    "ndarray-imshow": "^1.0.1",
+    "ndarray-scratch": "^1.2.0"
+  }
 }
