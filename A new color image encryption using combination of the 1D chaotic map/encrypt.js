@@ -2,6 +2,10 @@ const ndarray = require("ndarray")
 const getPixels = require('get-pixels')
 const imshow = require('ndarray-imshow')
 const pool = require("ndarray-scratch")
+const imhist = require('ndarray-imhist')
+const corr2 = require('ndarray-corr2')
+const entropy = require('ndarray-entropy')
+
 const {getSortIndexes, sortByIndexes} = require('../utils/array')
 
 // secret parameters
@@ -14,30 +18,40 @@ let lp = 600
 getPixels('../images/lena_gray_256.png', (err, pixels) => {
   if (err) throw err
   pixels = pixels.pick(null, null, 0)
-  pixels = pool.clone(pixels)
-  pixels.shape = [pixels.shape[0] * pixels.shape[1]]
-
+  let plainImage = pool.clone(pixels)
+  let cipherImage = pool.clone(pixels)
+  
   // permutation phase
-  console.time('permutation phase')
-  let x = chaoticMap(x0, u, k, pixels.shape[0], n0)
+  console.time('permutation')
+  cipherImage.shape = [cipherImage.shape[0] * cipherImage.shape[1]]
+  let x = chaoticMap(x0, u, k, cipherImage.shape[0], n0)
   let I = getSortIndexes(x)
-  pixels.data = sortByIndexes(pixels.data, I)
-  console.timeEnd('permutation phase')
+  cipherImage.data = sortByIndexes(cipherImage.data, I)
+  console.timeEnd('permutation')
   
   // diffusion phase
   console.time('diffusion')
   let D = getDiffusionVector(x)
-  pixels.data = diffusePixels(pixels.data, I, D)
+  cipherImage.data = diffusePixels(cipherImage.data, I, D)
   console.timeEnd('diffusion')
   
   // rotation phase
   console.time('rotation')
-  pixels.data = rotatePixels(pixels.data, lp)
+  cipherImage.data = rotatePixels(cipherImage.data, lp)
   console.timeEnd('rotation')
 
-  pixels.shape = [256, 256]
-  imshow(pixels, {gray: true})
+  cipherImage.shape = [256, 256]
 
+  // analytics
+  console.log('Correlation coeff:', corr2(cipherImage, plainImage))
+  console.log('Plain image entropy:', entropy(plainImage))
+  console.log('Cipher image entropy:', entropy(cipherImage))
+
+  imhist(cipherImage)
+  imhist(plainImage)
+
+  imshow(cipherImage, {gray: true})
+  imshow(plainImage, {gray: true})
 })
 
 function chaoticMap (x0, u, k, iterations, n0) {
