@@ -21,8 +21,8 @@
     "get-pixels": "^3.3.2",
     "ndarray": "^1.0.18",
     "ndarray-corr2": "^0.1.0",
-    "ndarray-entropy": "^0.3.0",
-    "ndarray-imhist": "^0.4.2",
+    "ndarray-entropy": "^0.4.0",
+    "ndarray-imhist": "^0.4.3",
     "ndarray-imshow": "^1.0.1",
     "ndarray-scratch": "^1.2.0"
   }
