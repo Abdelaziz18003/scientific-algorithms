@@ -24,6 +24,7 @@
     "ndarray-entropy": "^0.4.0",
     "ndarray-imhist": "^0.4.3",
     "ndarray-imshow": "^1.0.1",
-    "ndarray-scratch": "^1.2.0"
+    "ndarray-scratch": "^1.2.0",
+    "save-pixels": "^2.3.4"
   }
 }

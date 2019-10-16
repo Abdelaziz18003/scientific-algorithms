@@ -1,24 +1,8 @@
-const ndarray = require("ndarray")
-const getPixels = require('get-pixels')
-const imshow = require('ndarray-imshow')
 const pool = require("ndarray-scratch")
-const imhist = require('ndarray-imhist')
-const corr2 = require('ndarray-corr2')
-const entropy = require('ndarray-entropy')
-
 const {getSortIndexes, sortByIndexes} = require('../utils/array')
 
-// secret parameters
-let x0 = 0.456
-let u = 5.4321
-let k = 14
-let n0 = 1000
-let lp = 600
-
-getPixels('../images/lena_gray_256.png', (err, pixels) => {
-  if (err) throw err
-  pixels = pixels.pick(null, null, 0)
-  let plainImage = pool.clone(pixels)
+function encrypt (pixels, options) {
+  let {x0, u, k, n0, lp} = options
   let cipherImage = pool.clone(pixels)
   
   // permutation phase
@@ -41,18 +25,8 @@ getPixels('../images/lena_gray_256.png', (err, pixels) => {
   console.timeEnd('rotation')
 
   cipherImage.shape = [256, 256]
-
-  // analytics
-  console.log('Correlation coeff:', corr2(cipherImage, plainImage))
-  console.log('Plain image entropy:', entropy(plainImage))
-  console.log('Cipher image entropy:', entropy(cipherImage))
-
-  imhist(cipherImage)
-  imhist(plainImage)
-
-  imshow(cipherImage, {gray: true})
-  imshow(plainImage, {gray: true})
-})
+  return cipherImage
+}
 
 function chaoticMap (x0, u, k, iterations, n0) {
   let x = [x0]
@@ -89,3 +63,5 @@ function rotatePixels (array, amount) {
   }
   return newArray
 }
+
+module.exports = encrypt
