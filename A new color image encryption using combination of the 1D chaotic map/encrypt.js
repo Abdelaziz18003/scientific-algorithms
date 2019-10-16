@@ -1,7 +1,7 @@
 const pool = require("ndarray-scratch")
 const {getSortIndexes, sortByIndexes} = require('../utils/array')
 
-function encrypt (pixels, options) {
+function encrypt (pixels, options = {x0: 0.456, u: 5.4321, k: 14, n0: 1000, lp: 600}) {
   let {x0, u, k, n0, lp} = options
   let cipherImage = pool.clone(pixels)
   
@@ -24,7 +24,7 @@ function encrypt (pixels, options) {
   cipherImage.data = rotatePixels(cipherImage.data, lp)
   console.timeEnd('rotation')
 
-  cipherImage.shape = [256, 256]
+  cipherImage.shape = pixels.shape
   return cipherImage
 }
 
