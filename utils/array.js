@@ -21,7 +21,16 @@ function sortByIndexes(array, indexes) {
   return sortedArray
 }
 
+function reverseSortByIndexes(array, indexes) {
+  let sortedArray = []
+  indexes.forEach((index, i) => {
+    sortedArray[index] = array[i]
+  })
+  return sortedArray
+}
+
 module.exports = {
   getSortIndexes,
-  sortByIndexes
+  sortByIndexes,
+  reverseSortByIndexes
 }
