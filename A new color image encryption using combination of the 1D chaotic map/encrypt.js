@@ -16,7 +16,7 @@ function encrypt (pixels, options = {x0: 0.456, u: 5.4321, k: 14, n0: 1000, lp: 
   // diffusion phase
   console.time('diffusion')
   let D = getDiffusionVector(x)
-  cipherImage.data = diffusePixels(cipherImage.data, I, D)
+  cipherImage.data = diffusePixels(cipherImage.data, D)
   console.timeEnd('diffusion')
   
   // rotation phase
@@ -45,14 +45,13 @@ function getDiffusionVector (x) {
   return d
 }
 
-function diffusePixels (pixels, permutationVector, diffusionVector) {
-  let newPixels = []
-  newPixels[0] = pixels[0]
+function diffusePixels (pixels, diffusionVector) {
+  let diffusedPixels = []
+  diffusedPixels[0] = pixels[0]
   for (let i = 1; i < pixels.length; i++) {
-    let value = ((permutationVector[i] + diffusionVector[i]) % 256) ^ newPixels[i-1]
-    newPixels.push(value)
+    diffusedPixels.push(((pixels[i] + diffusionVector[i]) % 256) ^ diffusedPixels[i-1])
   }
-  return newPixels
+  return diffusedPixels
 }
 
 function rotatePixels (array, amount) {
