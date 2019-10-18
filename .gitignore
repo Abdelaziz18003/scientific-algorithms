@@ -1,1 +1,4 @@
 node_modules
+**/plain-image.png
+**/cipher-image.png
+**/*.dat
