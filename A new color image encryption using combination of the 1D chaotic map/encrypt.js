@@ -6,23 +6,17 @@ function encrypt (pixels, options = {x0: 0.456, u: 5.4321, k: 14, n0: 1000, lp: 
   let cipherImage = pool.clone(pixels)
   
   // permutation phase
-  console.time('permutation')
   cipherImage.shape = [cipherImage.shape[0] * cipherImage.shape[1]]
   let x = chaoticMap(x0, u, k, cipherImage.shape[0], n0)
   let I = getSortIndexes(x)
   cipherImage.data = sortByIndexes(cipherImage.data, I)
-  console.timeEnd('permutation')
   
   // diffusion phase
-  console.time('diffusion')
   let D = getDiffusionVector(x)
   cipherImage.data = diffusePixels(cipherImage.data, D)
-  console.timeEnd('diffusion')
   
   // rotation phase
-  console.time('rotation')
   cipherImage.data = rotatePixels(cipherImage.data, lp)
-  console.timeEnd('rotation')
 
   cipherImage.shape = pixels.shape
   return cipherImage

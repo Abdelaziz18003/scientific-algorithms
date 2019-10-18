@@ -11,19 +11,13 @@ function decrypt (cipherImage, options = {x0: 0.456, u: 5.4321, k: 14, n0: 1000,
   let D = getDiffusionVector(x)
   
   // reverse rotation phase
-  console.time('reverse rotation')
   plainImage.data = reverseRotatePixels(plainImage.data, lp)
-  console.timeEnd('reverse rotation')
 
   // reverse diffusion phase
-  console.time('reverse diffusion')
   plainImage.data = reverseDiffusePixels(plainImage.data, D)
-  console.timeEnd('reverse diffusion')
 
   // reverse permutation phase
-  console.time('reverse permutation')
   plainImage.data = reverseSortByIndexes(plainImage.data, I)
-  console.timeEnd('reverse permutation')
 
   plainImage.shape = cipherImage.shape
   return plainImage
