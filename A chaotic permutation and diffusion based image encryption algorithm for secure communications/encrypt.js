@@ -61,6 +61,8 @@ function diffusePixels (pixels, R) {
   let c = 0
   let p = 0
   let [m, n] = pixels.shape
+  let cipher = pool.zeros([m, n])
+
   for (let i = 0; i < m; i++) {
     for (let j = 0; j < n; j++) {
       p = pixels.get(i, j)
@@ -70,11 +72,10 @@ function diffusePixels (pixels, R) {
         r = (pixels.get(i-1, j-1) + R) % 256
       }
       c = (r ^ p ^ (m/(i + 1) + n/(j + 1)) % 256)
-      
-      pixels.set(i, j, c)
+      cipher.set(i, j, c)
     }
   }
-  return pixels
+  return cipher
 }
 
 module.exports = encrypt
