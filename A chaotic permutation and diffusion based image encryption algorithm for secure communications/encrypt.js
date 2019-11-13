@@ -64,8 +64,13 @@ function diffusePixels (pixels, R) {
   for (let i = 0; i < m; i++) {
     for (let j = 0; j < n; j++) {
       p = pixels.get(i, j)
-      r = (pixels.get(i-1, j-1) + R) % 256
-      c = (r ^ p ^ (m/i + n/j) % 256)
+      if (i == 0 || j == 0) {
+        r = R % 256
+      } else {
+        r = (pixels.get(i-1, j-1) + R) % 256
+      }
+      c = (r ^ p ^ (m/(i + 1) + n/(j + 1)) % 256)
+      
       pixels.set(i, j, c)
     }
   }
