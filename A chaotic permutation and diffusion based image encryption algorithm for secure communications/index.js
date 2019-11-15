@@ -14,7 +14,7 @@ if (process.argv.includes('decryption')) {
 }
 
 function encryption () {
-  imread('../images/lena_gray_128.png', (err, pixels) => {
+  imread('../images/lena_gray_64.png', (err, pixels) => {
     imshow(pixels)
     imhist(pixels)
   
