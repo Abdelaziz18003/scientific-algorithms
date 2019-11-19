@@ -14,12 +14,12 @@ if (process.argv.includes('decryption')) {
 }
 
 function encryption () {
-  imread('../images/lena_gray_128.png', (err, pixels) => {
-    // imshow(pixels)
-    // imhist(pixels)
+  imread('../images/lena_gray_256.png', async (err, pixels) => {
+    imshow(pixels)
+    imhist(pixels)
   
-    pixels = encrypt(pixels, {times: 1})
-    // imhist(pixels)
+    pixels = await encrypt(pixels, {times: 1})
+    imhist(pixels)
     imshow(pixels)
   })
 }
