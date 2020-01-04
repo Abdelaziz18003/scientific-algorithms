@@ -7,7 +7,6 @@ const imwrite = require('save-pixels')
 const encrypt = require('./encrypt')
 
 const plainImgURL = 'lena_gray_256.png'
-const refImgURL = 'phone.png'
 
 if (process.argv.includes('decryption')) {
   decryption()
@@ -20,7 +19,7 @@ function encryption () {
     imshow(pixels)
     imhist(pixels)
 
-    pixels = await encrypt(pixels, {times: 1, refImgURL})
+    pixels = await encrypt(pixels)
     imhist(pixels)
     imshow(pixels)
 

@@ -1,14 +1,13 @@
 const util = require('util')
-const ndarray = require('ndarray')
 const pool = require('ndarray-scratch')
 const ops = require('ndarray-ops')
 const imread = util.promisify(require('get-pixels'))
-const imhist = require('ndarray-imhist')
 
 const defaultOptions = {
   epsilon: 1,
   phi: 1,
-  times: 1,
+  times: 3,
+  rgbChannel: 2, // which channel of RefImg to mask the encrypted image in
   refImgURL: 'baboon_rgb_256.jpg'
 }
 
@@ -55,15 +54,14 @@ async function diffusePixels(pixels, options) {
   ops.bxor(Z, N, P)
 
   let refPixels = await imread(`../images/${options.refImgURL}`)
-  refPixels = pool.clone(refPixels.pick(null, null, 0))
   let cipher = pool.clone(refPixels)
 
   let cipherValue = 0
   for (let i = 0; i < m; i++) {
     for (let j = 0; j < n; j++) {
-      cipherValue = refPixels.get(i, j) - Z.get(i, j)
+      cipherValue = refPixels.get(i, j, options.rgbChannel) - Z.get(i, j)
       cipherValue = cipherValue >= 0 ? cipherValue : cipherValue + 256
-      cipher.set(i, j, cipherValue)
+      cipher.set(i, j, options.rgbChannel, cipherValue)
     }
   }
   return cipher
