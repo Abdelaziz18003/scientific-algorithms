@@ -3,6 +3,7 @@ const ndarray = require('ndarray')
 const pool = require('ndarray-scratch')
 const ops = require('ndarray-ops')
 const imread = util.promisify(require('get-pixels'))
+const imhist = require('ndarray-imhist')
 
 const defaultOptions = {
   epsilon: 1,
@@ -44,25 +45,24 @@ function permutePixels(pixels, options) {
 async function diffusePixels(pixels, options) {
   const [m, n] = pixels.shape
 
-  let N = pool.zeros([m, n])
-  ops.addeq(N, pixels)
-  ops.mulseq(N, 255)
+  let N = pool.clone(pixels)
   
   let key = pixels.get(0, 0)
-  let P = pool.zeros(pixels.shape)
+  let P = pool.zeros(pixels.shape, 'uint8')
   ops.addseq(P, key)
   
-  let Z = pool.zeros(pixels.shape)
+  let Z = pool.zeros(pixels.shape, 'uint8')
   ops.bxor(Z, N, P)
 
   let refPixels = await imread(`../images/${options.refImgURL}`)
-  refPixels = refPixels.pick(null, null, 0)
+  refPixels = pool.clone(refPixels.pick(null, null, 0))
   let cipher = pool.clone(refPixels)
 
   let cipherValue = 0
   for (let i = 0; i < m; i++) {
     for (let j = 0; j < n; j++) {
       cipherValue = refPixels.get(i, j) - Z.get(i, j)
+      cipherValue = cipherValue >= 0 ? cipherValue : cipherValue + 256
       cipher.set(i, j, cipherValue)
     }
   }
