@@ -19,7 +19,7 @@
   "homepage": "https://github.com/Abdelaziz18003/scientific-algorithms#readme",
   "dependencies": {
     "get-pixels": "^3.3.2",
-    "gnuplot-imshow": "^0.2.0",
+    "gnuplot-imshow": "^0.3.0",
     "ndarray": "^1.0.18",
     "ndarray-corr2": "^0.1.0",
     "ndarray-entropy": "^0.5.0",
