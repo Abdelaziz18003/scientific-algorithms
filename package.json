@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/Abdelaziz18003/scientific-algorithms#readme",
   "dependencies": {
-    "get-pixels": "^3.3.2",
+    "get-pixels": "^3.3.3",
     "gnuplot-imshow": "^0.3.0",
     "ndarray": "^1.0.18",
     "ndarray-corr2": "^0.1.0",
@@ -27,6 +27,6 @@
     "ndarray-imshow": "^1.0.1",
     "ndarray-ops": "^1.2.2",
     "ndarray-scratch": "^1.2.0",
-    "save-pixels": "^2.3.4"
+    "save-pixels": "^2.3.6"
   }
 }
